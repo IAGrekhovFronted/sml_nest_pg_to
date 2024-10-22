@@ -7,9 +7,9 @@ import {
     OneToMany
 } from 'typeorm';
 
-import { EmployeeType } from 'src/employeeType/employeeType.entity';
-import { EmployeeBaseSchedule } from 'src/employeeBaseSchedule/employeeBaseSchedule.entity';
-import { EmployeeSlotSchedule } from 'src/employeeSlotSchedule/employeeSlotSchedule.entity';
+import { EmployeeType } from 'src/employee-type/employeeType.entity';
+import { EmployeeBaseSchedule } from 'src/employee-base-schedule/employeeBaseSchedule.entity';
+import { EmployeeSlotSchedule } from 'src/employee-slot-schedule/employeeSlotSchedule.entity';
 
 @Entity()
 export class Employee {

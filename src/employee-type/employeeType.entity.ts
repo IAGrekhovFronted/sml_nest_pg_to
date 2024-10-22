@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { Employee } from 'src/employee/employee.entity';
-import { EmployeeWorkType } from 'src/employeeWorkType/employeeWorkType.entity';
+import { EmployeeWorkType } from 'src/employee-work-type/employeeWorkType.entity';
 
 @Entity()
 export class EmployeeType {
@@ -22,6 +22,6 @@ export class EmployeeType {
     @JoinColumn({ name: 'workTypeId' })
     employeeWorkType: EmployeeWorkType;
 
-    @OneToMany(() => Employee, employee => employee.type)
+    @OneToMany(() => Employee, employee => employee.type, { onDelete: 'CASCADE' })
     employee: Employee[];
 }

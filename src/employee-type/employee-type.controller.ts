@@ -1,7 +1,29 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body
+} from '@nestjs/common';
 import { EmployeeTypeService } from './employee-type.service';
 
-@Controller('employee-type')
+import { EmployeeType } from './employeeType.entity';
+
+@Controller('employeetype')
 export class EmployeeTypeController {
-  constructor(private readonly employeeTypeService: EmployeeTypeService) {}
+  constructor(private readonly employeeTypeService: EmployeeTypeService) { }
+  @Get('findAll')
+  async findAllEmployeeType() {
+    return this.employeeTypeService.findAllEmployeeType()
+  }
+
+  @Post('create')
+  async createEmployeeType(@Body() data: Partial<EmployeeType>) {
+    return await this.employeeTypeService.createEmployeeType(data)
+  }
+
+  @Delete('delete')
+  async deleteEmployeeType(@Body() id: { id: number }) {
+    return await this.employeeTypeService.deletwEmployeeType(id.id)
+  }
 }

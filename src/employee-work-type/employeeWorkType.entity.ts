@@ -5,7 +5,7 @@ import {
     OneToMany,
 } from 'typeorm';
 
-import { EmployeeType } from 'src/employeeType/employeeType.entity';
+import { EmployeeType } from 'src/employee-type/employeeType.entity';
 import { WorkRequest } from 'src/work-request/workRequest.entity';
 
 @Entity()

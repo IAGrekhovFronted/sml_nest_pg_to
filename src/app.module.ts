@@ -28,7 +28,8 @@ import { WorkRequestModule } from './work-request/work-request.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         synchronize: true,
-        entities: [__dirname + '/**/*.entity{.ts,.js}']
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        migrations: [/*...*/],
       }),
       inject: [ConfigService],
     }),

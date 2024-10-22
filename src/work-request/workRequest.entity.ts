@@ -7,8 +7,8 @@ import {
 } from 'typeorm';
 
 import { User } from 'src/user/user.entity';
-import { EmployeeSlotSchedule } from 'src/employeeSlotSchedule/employeeSlotSchedule.entity';
-import { EmployeeWorkType } from 'src/employeeWorkType/employeeWorkType.entity';
+import { EmployeeSlotSchedule } from 'src/employee-slot-schedule/employeeSlotSchedule.entity';
+import { EmployeeWorkType } from 'src/employee-work-type/employeeWorkType.entity';
 
 @Entity()
 export class WorkRequest {
