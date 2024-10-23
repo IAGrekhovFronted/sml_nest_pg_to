@@ -30,4 +30,8 @@ export class EmployeeTypeService {
     async deletwEmployeeType(id: number) {
         return this.emloyeeTypeRep.delete(id)
     }
+
+    async updateEmployeeType(id:number, data: Partial<EmployeeType>) {
+        return this.emloyeeTypeRep.update(id, data)
+    }
 }

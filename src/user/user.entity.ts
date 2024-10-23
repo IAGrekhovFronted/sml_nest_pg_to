@@ -7,8 +7,8 @@ import {
     JoinColumn
 } from 'typeorm';
 
-import { Role } from 'src/role/role.entity';
-import { WorkRequest } from 'src/work-request/workRequest.entity';
+import { Role } from '../role/role.entity';
+import { WorkRequest } from '../work-request/workRequest.entity';
 
 @Entity()
 export class User {
@@ -20,6 +20,9 @@ export class User {
 
     @Column({ nullable: true })
     name: string;
+
+    @Column({ nullable: true })
+    test: string;
 
     @ManyToOne(() => Role, role => role.users, { nullable: true })
     @JoinColumn({ name: 'roleId' })

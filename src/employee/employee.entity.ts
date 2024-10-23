@@ -7,11 +7,11 @@ import {
     OneToMany
 } from 'typeorm';
 
-import { EmployeeType } from 'src/employee-type/employeeType.entity';
-import { EmployeeBaseSchedule } from 'src/employee-base-schedule/employeeBaseSchedule.entity';
-import { EmployeeSlotSchedule } from 'src/employee-slot-schedule/employeeSlotSchedule.entity';
+import { EmployeeType } from '../employee-type/employeeType.entity.ts';
+import { EmployeeBaseSchedule } from '../employee-base-schedule/employeeBaseSchedule.entity.ts';
+import { EmployeeSlotSchedule } from '../employee-slot-schedule/employeeSlotSchedule.entity.ts';
 
-@Entity()
+@Entity({schema: 'public'})
 export class Employee {
     @PrimaryGeneratedColumn()
     id: number;

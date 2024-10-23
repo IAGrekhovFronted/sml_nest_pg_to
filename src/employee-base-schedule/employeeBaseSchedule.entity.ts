@@ -6,7 +6,7 @@ import {
     JoinColumn,
 } from 'typeorm';
 
-import { Employee } from 'src/employee/employee.entity';
+import { Employee } from '../employee/employee.entity.ts';
 
 @Entity()
 export class EmployeeBaseSchedule {

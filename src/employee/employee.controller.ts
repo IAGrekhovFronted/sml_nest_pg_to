@@ -1,10 +1,22 @@
-import { Controller, Post, Delete, Patch, Body, Param } from '@nestjs/common';
+import { 
+  Controller, 
+  Post,
+  Get, 
+  Delete, 
+  Patch, 
+  Body, 
+  Param } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { Employee } from './employee.entity';
 
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) { }
+
+  @Get('findAll')
+  async findAllEmployee() {
+    return this.employeeService.findAllEmployee()
+  }
 
   @Post('create')
   async createEmployee(@Body() data: Partial<Employee>) {
