@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "migration:run": "ts-node ./src/runMigration.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js -d ./src/data.source.ts",
     "typeorm2": "npm run typeorm -- migration:generate ./src/mirgation/public",
     "typeorm3": "npm run build && npm run typeorm migration:run",

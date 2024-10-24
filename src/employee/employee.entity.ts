@@ -7,9 +7,9 @@ import {
     OneToMany
 } from 'typeorm';
 
-import { EmployeeType } from '../employee-type/employeeType.entity.ts';
-import { EmployeeBaseSchedule } from '../employee-base-schedule/employeeBaseSchedule.entity.ts';
-import { EmployeeSlotSchedule } from '../employee-slot-schedule/employeeSlotSchedule.entity.ts';
+import { EmployeeType } from '../employee-type/employeeType.entity';
+import { EmployeeBaseSchedule } from '../employee-base-schedule/employeeBaseSchedule.entity';
+import { EmployeeSlotSchedule } from '../employee-slot-schedule/employeeSlotSchedule.entity';
 
 @Entity({schema: 'public'})
 export class Employee {
