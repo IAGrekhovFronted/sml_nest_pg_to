@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Delete,
+  Patch,
   Body
 } from '@nestjs/common';
 import { EmployeeTypeService } from './employee-type.service';
@@ -19,11 +20,17 @@ export class EmployeeTypeController {
 
   @Post('create')
   async createEmployeeType(@Body() data: Partial<EmployeeType>) {
-    return await this.employeeTypeService.createEmployeeType(data)
+
+    return await this.employeeTypeService.createEmployeeType(data.employeeWorkType, data)
   }
 
   @Delete('delete')
   async deleteEmployeeType(@Body() id: { id: number }) {
     return await this.employeeTypeService.deletwEmployeeType(id.id)
+  }
+
+  @Patch('update')
+  async updateEmployeeType(@Body() data:{employeeTypeId: number, employeeType:Partial<EmployeeType>}) {
+    return await this.employeeTypeService.updateEmployeeType(data.employeeTypeId, data.employeeType)
   }
 }

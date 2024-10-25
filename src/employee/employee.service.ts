@@ -16,6 +16,10 @@ export class EmployeeService {
         private employeeTypeRep: Repository<EmployeeType>
     ) { }
 
+    async findEmployee() {
+        return this.employeeRep.find()
+    }
+
     async createEmployee(_id, data: Partial<Employee>) {
         const employeeType = await this.employeeTypeRep.findOneBy({ id: _id })
         data.type = employeeType
@@ -31,7 +35,7 @@ export class EmployeeService {
 
     async patchEmployee(idEmployee, idEmployeeType, data: Partial<Employee>) {
 
-        const employeeType = await this.employeeTypeRep.findOneBy({id: idEmployeeType})
+        const employeeType = await this.employeeTypeRep.findOneBy({ id: idEmployeeType })
         data.type = employeeType
         await this.employeeRep.update(idEmployee, data)
     }

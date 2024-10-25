@@ -1,10 +1,15 @@
-import { Controller, Post, Delete, Patch, Body, Param } from '@nestjs/common';
+import { Controller, Post, Delete, Patch, Get, Body, Param } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { Employee } from './employee.entity';
 
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) { }
+
+  @Get('find')
+  async findAllEmployee() {
+    return this.employeeService.findEmployee()
+  }
 
   @Post('create')
   async createEmployee(@Body() data: Partial<Employee>) {
@@ -21,7 +26,7 @@ export class EmployeeController {
     @Param('id') idEmployee: number,
     @Body() data: Partial<Employee>) {
     const idEmployeeType = data.type
-    
+
     return await this.employeeService.patchEmployee(idEmployee, idEmployeeType, data)
   }
 }
