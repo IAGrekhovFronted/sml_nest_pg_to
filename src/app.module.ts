@@ -10,6 +10,7 @@ import { EmployeeSlotScheduleModule } from './employee-slot-schedule/employee-sl
 import { EmployeeTypeModule } from './employee-type/employee-type.module';
 import { EmployeeWorkTypeModule } from './employee-work-type/employee-work-type.module';
 import { WorkRequestModule } from './work-request/work-request.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { WorkRequestModule } from './work-request/work-request.module';
     EmployeeTypeModule,
     EmployeeWorkTypeModule,
     WorkRequestModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
