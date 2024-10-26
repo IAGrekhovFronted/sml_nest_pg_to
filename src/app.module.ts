@@ -11,6 +11,7 @@ import { EmployeeTypeModule } from './employee-type/employee-type.module';
 import { EmployeeWorkTypeModule } from './employee-work-type/employee-work-type.module';
 import { WorkRequestModule } from './work-request/work-request.module';
 import { UserModule } from './user/user.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { UserModule } from './user/user.module';
     EmployeeTypeModule,
     EmployeeWorkTypeModule,
     WorkRequestModule,
-    UserModule
+    UserModule,
+    AuthenticationModule
   ],
   controllers: [AppController],
   providers: [AppService],
