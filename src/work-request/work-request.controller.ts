@@ -1,12 +1,17 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Patch, Body } from '@nestjs/common';
 import { WorkRequestService } from './work-request.service';
 
-@Controller('work-request')
+@Controller('request')
 export class WorkRequestController {
   constructor(private readonly workRequestService: WorkRequestService) { }
 
-  @Post()
-  async createWorkRequest(date: Date, userId: number, employeeWorkTypeId: number) {
-    return await this.workRequestService.getAvailableSlot(date, userId, employeeWorkTypeId)
+  @Post('create')
+  async createWorkRequest(@Body() data: { date: Date, userId: number, employeeWorkTypeId: number }) {
+    return await this.workRequestService.getAvailableSlot(data.date, data.userId, data.employeeWorkTypeId)
+  }
+
+  @Patch('canceled')
+  async canceledWorkRequest(@Body() idWorkRequest:{ id:number}) {
+    return await this.workRequestService.cancelRequest(idWorkRequest.id)
   }
 }

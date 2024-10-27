@@ -12,8 +12,12 @@ export class AuthenticationService {
     ) { }
 
     async setAuth(_email: string) {
-        const user = await this.userRep.findOneBy({ email: _email })
+        const user = await this.userRep.findOne({
+            where: { email: _email },
+            relations: ['role']
+        })
         if (user === null) throw new UnauthorizedException();
-        return "Авторизация успешна"
+        console.log(user)
+        return `Авторизация успешна. Роль ${user.role.description}`
     }
 }
