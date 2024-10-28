@@ -1,14 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 
 import { User } from 'src/user/user.entity';
+import { access } from 'fs';
 
 @Injectable()
 export class AuthenticationService {
     constructor(
         @InjectRepository(User)
-        private readonly userRep: Repository<User>
+        private readonly userRep: Repository<User>,
+
+        private readonly jwtService: JwtService
     ) { }
 
     async setAuth(_email: string) {
@@ -17,7 +21,8 @@ export class AuthenticationService {
             relations: ['role']
         })
         if (user === null) throw new UnauthorizedException();
-        console.log(user)
-        return `Авторизация успешна. Роль ${user.role.description}`
+        const payload = { userId: user.id, role: user.role.description }
+
+        return { access_token: await this.jwtService.signAsync(payload) }
     }
 }
