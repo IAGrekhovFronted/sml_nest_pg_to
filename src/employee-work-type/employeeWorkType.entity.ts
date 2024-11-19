@@ -5,8 +5,8 @@ import {
     OneToMany,
 } from 'typeorm';
 
-import { EmployeeType } from 'src/employee-type/employeeType.entity';
-import { WorkRequest } from 'src/work-request/workRequest.entity';
+import { EmployeeType } from '../employee-type/employeeType.entity';
+import { WorkRequest } from '../work-request/workRequest.entity';
 
 @Entity()
 export class EmployeeWorkType {

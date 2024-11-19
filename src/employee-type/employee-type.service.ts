@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { EmployeeType } from './employeeType.entity';
-import { EmployeeWorkType } from 'src/employee-work-type/employeeWorkType.entity';
+import { EmployeeWorkType } from '../employee-work-type/employeeWorkType.entity';
 
 @Injectable()
 export class EmployeeTypeService {

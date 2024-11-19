@@ -1,5 +1,4 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
-import { use } from "passport";
 import { Observable } from "rxjs";
 
 @Injectable()

@@ -8,7 +8,6 @@ import { AuthenticationController } from './authentication.controller';
 
 import { JwtStrategy } from './authentication.strategy';
 
-
 import { User } from 'src/user/user.entity';
 @Module({
   imports: [
@@ -18,7 +17,7 @@ import { User } from 'src/user/user.entity';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'MySecretKey',
-      signOptions: {expiresIn: '60s'}
+      signOptions: {expiresIn: '60m'}
     })
   ],
   controllers: [AuthenticationController],

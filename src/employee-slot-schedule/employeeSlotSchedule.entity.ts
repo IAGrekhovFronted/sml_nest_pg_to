@@ -7,8 +7,8 @@ import {
     JoinColumn
 } from 'typeorm';
 
-import { Employee } from 'src/employee/employee.entity';
-import { WorkRequest } from 'src/work-request/workRequest.entity';
+import { Employee } from '../employee/employee.entity';
+import { WorkRequest } from '../work-request/workRequest.entity';
 
 @Entity()
 export class EmployeeSlotSchedule {

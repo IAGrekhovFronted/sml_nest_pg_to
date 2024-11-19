@@ -6,9 +6,9 @@ import {
     JoinColumn
 } from 'typeorm';
 
-import { User } from 'src/user/user.entity';
-import { EmployeeSlotSchedule } from 'src/employee-slot-schedule/employeeSlotSchedule.entity';
-import { EmployeeWorkType } from 'src/employee-work-type/employeeWorkType.entity';
+import { User } from '../user/user.entity';
+import { EmployeeSlotSchedule } from '../employee-slot-schedule/employeeSlotSchedule.entity';
+import { EmployeeWorkType } from '../employee-work-type/employeeWorkType.entity';
 
 @Entity()
 export class WorkRequest {

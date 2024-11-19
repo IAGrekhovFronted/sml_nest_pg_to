@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WorkRequestController } from './work-request.controller';
+import { UserWorkRequestController } from './user-work-request.controller';
 import { WorkRequestService } from './work-request.service';
 
-describe('WorkRequestController', () => {
-  let controller: WorkRequestController;
+describe('UserWorkRequestController', () => {
+  let controller: UserWorkRequestController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [WorkRequestController],
+      controllers: [UserWorkRequestController],
       providers: [WorkRequestService],
     }).compile();
 
-    controller = module.get<WorkRequestController>(WorkRequestController);
+    controller = module.get<UserWorkRequestController>(UserWorkRequestController);
   });
 
   it('should be defined', () => {

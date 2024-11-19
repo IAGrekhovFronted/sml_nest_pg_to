@@ -13,6 +13,8 @@ import { WorkRequestModule } from './work-request/work-request.module';
 import { UserModule } from './user/user.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 
+import { Notification } from './notification/notification.service';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,6 +47,6 @@ import { AuthenticationModule } from './authentication/authentication.module';
     AuthenticationModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Notification],
 })
 export class AppModule { }

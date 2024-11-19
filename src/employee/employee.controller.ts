@@ -1,8 +1,11 @@
-import { Controller, Post, Delete, Patch, Get, Body, Param } from '@nestjs/common';
+import { Controller, Post, Delete, Patch, Get, Body, Param, UseGuards } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { Employee } from './employee.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/authentication/role.guard';
 
 @Controller('employee')
+@UseGuards(AuthGuard('jwt'), new RolesGuard(['Admin']))
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) { }
 

@@ -2,12 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, MoreThan, Repository } from 'typeorm';
 
-import { EmployeeSlotSchedule } from 'src/employee-slot-schedule/employeeSlotSchedule.entity';
-import { EmployeeBaseSchedule } from 'src/employee-base-schedule/employeeBaseSchedule.entity';
+import { EmployeeSlotSchedule } from '../employee-slot-schedule/employeeSlotSchedule.entity';
+import { EmployeeBaseSchedule } from '../employee-base-schedule/employeeBaseSchedule.entity';
 import { WorkRequest } from './workRequest.entity';
-import { Employee } from 'src/employee/employee.entity';
-import { User } from 'src/user/user.entity';
-import { EmployeeWorkType } from 'src/employee-work-type/employeeWorkType.entity';
+import { Employee } from '../employee/employee.entity';
+import { User } from '../user/user.entity';
+import { EmployeeWorkType } from '../employee-work-type/employeeWorkType.entity';
+
+import { EmployeeRequest } from './employee-request.interface';
+
+import { Notification } from '../notification/notification.service';
+
+import { WorkStatus } from './status.enum';
 
 @Injectable()
 export class WorkRequestService {
@@ -39,7 +45,25 @@ export class WorkRequestService {
         return await this.workRequestRep.save(request)
     }
 
-    private async getEmployee(date: Date) {
+    private async getEmployee(date: Date, employee?: EmployeeRequest) {
+
+        if (employee) {
+            const employeeSlot: EmployeeBaseSchedule = await this.employeeBaseScheduleRep.findOne({
+                where: {
+                    start: LessThan(date),
+                    end: MoreThan(date),
+                    employee: {
+                        id: employee.employeeId,
+                        type: {
+                            id: employee.workTypeId
+                        }
+                    }
+                },
+                relations: ['employee', 'employee_type']
+            });
+            return employeeSlot.employee
+        }
+
         const employeeSlot: EmployeeBaseSchedule = await this.employeeBaseScheduleRep.findOne({
             where: {
                 start: LessThan(date),
@@ -67,11 +91,10 @@ export class WorkRequestService {
                 id: employeeWorkTypeId
             }
         })
-
         return employeeWorkType
     }
 
-    async getAvailableSlot(date: Date, userId: number, employeeWorkTypeId: number) {
+    async getAvailableSlot(date: Date, userId: number, employeeWorkTypeId: number, employeeRequest?: EmployeeRequest) {
 
         const employee: Employee = await this.getEmployee(date)
 
@@ -89,16 +112,18 @@ export class WorkRequestService {
             let endDate: Date = new Date(startDate);
 
             endDate.setHours(startDate.getHours() + 1);
-
             const slots = await this.employeeSlotScheduleRep.find({
                 where: {
                     startDate: startDate,
-                    endDate: endDate
-                }
+                    endDate: endDate,
+                    employee: {
+                        type: employeeWorkType.employeeType
+                    }
+                },
+                relations: ['employee']
             });
 
             if (slots.length === 0) {
-
                 let sendDataSlotShedule: Partial<EmployeeSlotSchedule> =
                 {
                     startDate: startDate,
@@ -107,11 +132,13 @@ export class WorkRequestService {
                 };
 
                 const createdSlot = await this.createSlotShedule(sendDataSlotShedule);
+                const notify: Notification = new Notification()
+                await notify.sendMail('Создание заявки', `По вашей заявке назначен специалист ${employee.name} на ${startDate}`, user.email)
 
                 let sendDataWorkRequest: Partial<WorkRequest> =
                 {
                     user: user,
-                    status: "WAITING",
+                    status: WorkStatus.WAITING,
                     employeeWorkType: employeeWorkType,
                     slot: createdSlot
                 }
@@ -129,7 +156,30 @@ export class WorkRequestService {
                 id: idWorkRequest
             }
         })
-        workRequest.status = "CANCELED"
+        workRequest.status = WorkStatus.CANCELED
         return await this.workRequestRep.save(workRequest)
+    }
+
+    async findAllRequest_admin() {
+        const workRequest = await this.workRequestRep.find()
+        return workRequest
+    }
+
+    async findAllRequest_user(UserId: number) {
+        const workRequest = await this.workRequestRep.findBy({ userId: UserId })
+        return workRequest
+    }
+
+    async findRequestById(id: number) {
+        const workRequest = await this.workRequestRep.findOne({
+            where: {
+                id: id
+            }
+        })
+        return workRequest
+    }
+
+    async findRequestByEmployee(EmployeeId: number) {
+
     }
 }

@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Delete, Patch, Body } from '@nestjs/common';
-import { EmployeeBaseScheduleService } from './employee-base-schedule.service';
+import { Controller, Get, Post, Delete, Patch, Body, UseGuards } from '@nestjs/common';
 
+import { EmployeeBaseScheduleService } from './employee-base-schedule.service';
 import { EmployeeBaseSchedule } from './employeeBaseSchedule.entity';
 
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../authentication/role.guard';
+
 @Controller('base-schedule')
+@UseGuards(AuthGuard('jwt'), new RolesGuard(['Admin']))
 export class EmployeeBaseScheduleController {
   constructor(private readonly employeeBaseScheduleService: EmployeeBaseScheduleService) { }
 

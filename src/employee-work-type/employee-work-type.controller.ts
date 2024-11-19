@@ -4,13 +4,18 @@ import {
   Delete,
   Get,
   Patch,
-  Body
+  Body,
+  UseGuards
 } from '@nestjs/common';
 
 import { EmployeeWorkTypeService } from './employee-work-type.service';
 import { EmployeeWorkType } from './employeeWorkType.entity';
 
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../authentication/role.guard'; 
+
 @Controller('worktype')
+@UseGuards(AuthGuard('jwt'), new RolesGuard(['Admin']))
 export class EmployeeWorkTypeController {
   constructor(private readonly employeeWorkTypeService: EmployeeWorkTypeService) { }
 
@@ -21,6 +26,7 @@ export class EmployeeWorkTypeController {
 
   @Post('create')
   async createWorkType(@Body() data: Partial<EmployeeWorkType>) {
+    
     return await this.employeeWorkTypeService.createWorkType(data)
   }
 

@@ -4,13 +4,18 @@ import {
   Post,
   Delete,
   Patch,
-  Body
+  Body,
+  UseGuards
 } from '@nestjs/common';
-import { EmployeeTypeService } from './employee-type.service';
 
+import { EmployeeTypeService } from './employee-type.service';
 import { EmployeeType } from './employeeType.entity';
 
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../authentication/role.guard';
+
 @Controller('employeetype')
+@UseGuards(AuthGuard('jwt'), new RolesGuard(['Admin']))
 export class EmployeeTypeController {
   constructor(private readonly employeeTypeService: EmployeeTypeService) { }
   @Get('findAll')

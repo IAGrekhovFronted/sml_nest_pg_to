@@ -7,8 +7,8 @@ import {
     JoinColumn
 } from 'typeorm';
 
-import { Role } from 'src/role/role.entity';
-import { WorkRequest } from 'src/work-request/workRequest.entity';
+import { Role } from '../role/role.entity';
+import { WorkRequest } from '../work-request/workRequest.entity';
 
 @Entity()
 export class User {
