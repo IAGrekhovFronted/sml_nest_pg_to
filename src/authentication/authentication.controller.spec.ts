@@ -1,47 +1,57 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthenticationController } from './authentication.controller';
-import { AuthenticationService } from './authentication.service';
+import { Test } from "@nestjs/testing";
+import { AuthenticationController } from "./authentication.controller";
+import { AuthenticationService } from "./authentication.service";
+import { UnauthorizedException } from "@nestjs/common";
+
+const mockAuthenticationService = {
+    setAuth: jest.fn()
+}
 
 describe('AuthenticationController', () => {
-  let authenticationController: AuthenticationController;
-  let authenticationService: AuthenticationService;
+    let controller: AuthenticationController
+    let service: AuthenticationService
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthenticationController],
-      providers: [
-        {
-          provide: AuthenticationService,
-          useValue: {
-            setAuth: jest.fn().mockResolvedValue({ success: true }),
-          },
-        },
-      ],
-    }).compile();
+    beforeEach(
+        async () => {
+            const module = await Test.createTestingModule({
+                controllers: [AuthenticationController],
+                providers: [{
+                    provide: AuthenticationService,
+                    useValue: mockAuthenticationService
+                }
+                ]
+            }).compile()
 
-    authenticationController = module.get<AuthenticationController>(AuthenticationController);
-    authenticationService = module.get<AuthenticationService>(AuthenticationService);
-  });
+            controller = module.get<AuthenticationController>(AuthenticationController)
+            service = module.get<AuthenticationService>(AuthenticationService)
+        }
+    )
 
-  it('should be defined', () => {
-    expect(authenticationController).toBeDefined();
-  });
+    afterAll(
+        async () => jest.clearAllMocks()
+    )
 
-  describe('setAuth', () => {
-    it('should call AuthenticationService.setAuth with the correct email', async () => {
-      const email = { email: 'test@example.com' };
-      
-      await authenticationController.setAuth(email);
+    it('should be define', () => {
+        expect(controller).toBeDefined()
+    })
 
-      expect(authenticationService.setAuth).toHaveBeenCalledWith(email.email);
-    });
+    describe('setAuth', () => {
+        it('should be authorized', async () => {
+            let email = 'test_authorized@mail.ru'
 
-    it('should return the result of AuthenticationService.setAuth', async () => {
-      const email = { email: 'test@example.com' };
-      
-      const result = await authenticationController.setAuth(email);
+            mockAuthenticationService.setAuth.mockResolvedValue(
+                { access_token: 'token' }
+            )
 
-      expect(result).toEqual({ success: true });
-    });
-  });
-});
+            expect(await controller.setAuth({ email: email })).toEqual({ access_token: 'token' })
+        })
+
+        it('should be unauthorized', async () => {
+            let email = 'test_unauthorized@mail.ru'
+
+            mockAuthenticationService.setAuth.mockRejectedValue(new UnauthorizedException())
+
+            await expect(controller.setAuth({ email: email })).rejects.toThrow(UnauthorizedException)
+        })
+    })
+})
