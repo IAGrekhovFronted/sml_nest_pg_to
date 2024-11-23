@@ -24,7 +24,7 @@ export class EmployeeService {
         const employeeType = await this.employeeTypeRep.findOneBy({ id: _id })
         data.type = employeeType
 
-        const employee = this.employeeRep.create(data)
+        const employee = await this.employeeRep.create(data)
         return await this.employeeRep.save(employee)
     }
 
@@ -38,5 +38,6 @@ export class EmployeeService {
         const employeeType = await this.employeeTypeRep.findOneBy({ id: idEmployeeType })
         data.type = employeeType
         await this.employeeRep.update(idEmployee, data)
+        return 'Сотрудник успешно обновлен'
     }
 }

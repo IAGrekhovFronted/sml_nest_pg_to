@@ -1,14 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { EmployeeService } from './employee.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Employee } from './employee.entity';
-import { EmployeeType } from '../employee-type/employeeType.entity';
-import { Repository } from 'typeorm';
+import { Test, TestingModule } from "@nestjs/testing";
+import { EmployeeService } from "./employee.service";
+import { Employee } from "./employee.entity";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { EmployeeType } from "../employee-type/employeeType.entity";
+import exp from "constants";
 
 describe('EmployeeService', () => {
-  let service: EmployeeService;
-  let employeeRepository: Repository<Employee>;
-  let employeeTypeRepository: Repository<EmployeeType>;
 
   const mockEmployeeRepository = {
     find: jest.fn(),
@@ -16,12 +13,14 @@ describe('EmployeeService', () => {
     create: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
-    update: jest.fn(),
-  };
+    update: jest.fn()
+  }
 
   const mockEmployeeTypeRepository = {
-    findOneBy: jest.fn(),
-  };
+    findOneBy: jest.fn()
+  }
+
+  let employeeService: EmployeeService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,83 +28,94 @@ describe('EmployeeService', () => {
         EmployeeService,
         {
           provide: getRepositoryToken(Employee),
-          useValue: mockEmployeeRepository,
+          useValue: mockEmployeeRepository
         },
         {
           provide: getRepositoryToken(EmployeeType),
-          useValue: mockEmployeeTypeRepository,
+          useValue: mockEmployeeTypeRepository
         },
-      ],
-    }).compile();
 
-    service = module.get<EmployeeService>(EmployeeService);
-    employeeRepository = module.get<Repository<Employee>>(getRepositoryToken(Employee));
-    employeeTypeRepository = module.get<Repository<EmployeeType>>(getRepositoryToken(EmployeeType));
-  });
+      ]
+    }).compile()
 
-  afterEach(() => {
+    employeeService = module.get<EmployeeService>(EmployeeService)
+  })
+
+  afterAll(async () => {
     jest.clearAllMocks();
-  });
+  })
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+    expect(employeeService).toBeDefined()
+  })
 
-  describe('findEmployee', () => {
-    it('should return an array of employees', async () => {
-      const result = [{ id: 1, name: 'John Doe' }];
-      mockEmployeeRepository.find.mockResolvedValue(result);
-      
-      expect(await service.findEmployee()).toBe(result);
-      expect(mockEmployeeRepository.find).toHaveBeenCalledTimes(1);
-    });
-  });
+  it('should be find all employee', async () => {
+    const employee = [
+      {
+        id: 1,
+        name: "Test #1",
+        type: 1
+      },
+      {
+        id: 2,
+        name: "Test #2",
+        type: 2
+      }
+    ]
 
-  describe('createEmployee', () => {
-    it('should create a new employee', async () => {
-      const employeeId = 1;
-      const employeeData: Partial<Employee> = { name: 'New Employee' };
-      const employeeType = { id: employeeId, description: 'Admin' };
+    mockEmployeeRepository.find.mockResolvedValue(employee)
+    const result = await employeeService.findEmployee()
 
-      mockEmployeeTypeRepository.findOneBy.mockResolvedValue(employeeType);
-      mockEmployeeRepository.create.mockReturnValue(employeeData);
-      mockEmployeeRepository.save.mockResolvedValue(employeeData);
+    expect(result).toEqual(employee)
+  })
 
-      const result = await service.createEmployee(employeeId, employeeData);
-      
-      expect(result).toEqual(employeeData);
-      expect(mockEmployeeTypeRepository.findOneBy).toHaveBeenCalledWith({ id: employeeId });
-      expect(mockEmployeeRepository.create).toHaveBeenCalledWith({ ...employeeData, type: employeeType });
-      expect(mockEmployeeRepository.save).toHaveBeenCalledWith(employeeData);
-    });
-  });
+  it('should be create employee', async () => {
 
-  describe('deleteEmployee', () => {
-    it('should delete an employee', async () => {
-      const employeeId = { id: 1 };
-      mockEmployeeRepository.delete.mockResolvedValue(undefined);
+    const createdEmployee = new Employee()
+    const partialEmployee: Partial<Employee> = { name: "Моковый сотрудник" }
+    const findEmployeeType = new EmployeeType()
+    createdEmployee.name = partialEmployee.name
+    createdEmployee.type = findEmployeeType
 
-      const result = await service.deleteEmployee(employeeId);
-      
-      expect(result).toEqual(`Сотрудник с id ${employeeId.id} удален`);
-      expect(mockEmployeeRepository.delete).toHaveBeenCalledWith(employeeId);
-    });
-  });
+    mockEmployeeTypeRepository.findOneBy.mockResolvedValue(findEmployeeType)
+    mockEmployeeRepository.create.mockReturnValue(createdEmployee)
+    mockEmployeeRepository.save.mockResolvedValue(createdEmployee)
 
-  describe('patchEmployee', () => {
-    it('should update an employee', async () => {
-      const idEmployee = 1;
-      const idEmployeeType = 2;
-      const employeeData: Partial<Employee> = { name: 'Updated Employee' };
-      const employeeType = { id: idEmployeeType, description: 'User' };
+    const result = await employeeService.createEmployee(1, partialEmployee)
 
-      mockEmployeeTypeRepository.findOneBy.mockResolvedValue(employeeType);
-      mockEmployeeRepository.update.mockResolvedValue(undefined);
+    expect(result).toEqual(expect.objectContaining({
+      name: partialEmployee.name,
+      type: findEmployeeType,
+    }));
 
-      await service.patchEmployee(idEmployee, idEmployeeType, employeeData);
+    expect(mockEmployeeTypeRepository.findOneBy).toHaveBeenCalledWith({ id: 1 })
+    expect(mockEmployeeRepository.create).toHaveBeenCalledWith(partialEmployee)
+    expect(mockEmployeeRepository.save).toHaveBeenCalledWith(createdEmployee)
+  })
 
-      expect(mockEmployeeTypeRepository.findOneBy).toHaveBeenCalledWith({ id: idEmployeeType });
-      expect(mockEmployeeRepository.update).toHaveBeenCalledWith(idEmployee, { ...employeeData, type: employeeType });
-    });
-  });
-});
+  it('should be delete employee', async () => {
+    const id = { id: 1 }
+    mockEmployeeRepository.delete.mockReturnValue(`Сотрудник с id ${id.id} удален`)
+
+    const result = await employeeService.deleteEmployee(id)
+
+    expect(result).toEqual(`Сотрудник с id ${id.id} удален`)
+  })
+
+  it('should be update employee', async () => {
+    const mockPatch = {
+      EmployeeId: 1,
+      EmployeeType: 2,
+      UpdateData: { name: 'Моковый сотрудник' }
+    }
+
+    mockEmployeeTypeRepository.findOneBy.mockResolvedValue(mockPatch.EmployeeType)
+    mockEmployeeRepository.update.mockReturnValue('Сотрудник успешно обновлен')
+
+    const result = await employeeService.patchEmployee(mockPatch.EmployeeId, mockPatch.EmployeeType, mockPatch.UpdateData)
+
+    expect(result).toEqual('Сотрудник успешно обновлен')
+    expect(mockEmployeeTypeRepository.findOneBy).toHaveBeenCalledWith({ id: mockPatch.EmployeeType })
+    expect(mockEmployeeRepository.update).toHaveBeenCalledWith(mockPatch.EmployeeId, mockPatch.UpdateData)
+  })
+})

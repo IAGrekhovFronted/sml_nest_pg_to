@@ -2,7 +2,7 @@ import { Controller, Post, Delete, Patch, Get, Body, Param, UseGuards } from '@n
 import { EmployeeService } from './employee.service';
 import { Employee } from './employee.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/authentication/role.guard';
+import { RolesGuard } from '../authentication/role.guard';
 
 @Controller('employee')
 @UseGuards(AuthGuard('jwt'), new RolesGuard(['Admin']))
