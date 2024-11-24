@@ -35,7 +35,7 @@ export class EmployeeTypeController {
   }
 
   @Patch('update')
-  async updateEmployeeType(@Body() data:{employeeTypeId: number, employeeType:Partial<EmployeeType>}) {
+  async updateEmployeeType(@Body() data: { employeeTypeId: number, employeeType: Partial<EmployeeType> }) {
     return await this.employeeTypeService.updateEmployeeType(data.employeeTypeId, data.employeeType)
   }
 }

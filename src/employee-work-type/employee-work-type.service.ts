@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EmployeeWorkType } from './employeeWorkType.entity';
-import { EmployeeType } from '../employee-type/employeeType.entity';
 
 @Injectable()
 export class EmployeeWorkTypeService {
@@ -10,9 +9,6 @@ export class EmployeeWorkTypeService {
     constructor(
         @InjectRepository(EmployeeWorkType)
         private readonly worktypeRep: Repository<EmployeeWorkType>,
-
-        @InjectRepository(EmployeeType)
-        private readonly employeeType: Repository<EmployeeType>
     ) { }
 
     async findAll() {

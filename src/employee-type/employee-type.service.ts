@@ -20,7 +20,7 @@ export class EmployeeTypeService {
         return await this.emloyeeTypeRep.find()
     }
 
-    async createEmployeeType(employeeTypeId, data: Partial<EmployeeType>): Promise<EmployeeType> {
+    async createEmployeeType(employeeTypeId, data: Partial<EmployeeType>) {
         const workType = await this.employeeWorkTypeRep.findOneBy({ id: employeeTypeId })
         data.employeeWorkType = workType
         const employeeType = await this.emloyeeTypeRep.create(data)
