@@ -6,7 +6,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmployeeModule } from './employee/employee.module';
 import { EmployeeBaseScheduleModule } from './employee-base-schedule/employee-base-schedule.module';
-import { EmployeeSlotScheduleModule } from './employee-slot-schedule/employee-slot-schedule.module';
 import { EmployeeTypeModule } from './employee-type/employee-type.module';
 import { EmployeeWorkTypeModule } from './employee-work-type/employee-work-type.module';
 import { WorkRequestModule } from './work-request/work-request.module';
@@ -39,7 +38,6 @@ import { Notification } from './notification/notification.service';
     }),
     EmployeeModule,
     EmployeeBaseScheduleModule,
-    EmployeeSlotScheduleModule,
     EmployeeTypeModule,
     EmployeeWorkTypeModule,
     WorkRequestModule,

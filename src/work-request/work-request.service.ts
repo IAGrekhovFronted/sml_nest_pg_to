@@ -106,6 +106,10 @@ export class WorkRequestService {
 
         let _date: Date = new Date(date);
 
+        let tries = 0;
+
+        const MAX_TRIES = 48
+
         do {
 
             let startDate: Date = _date
@@ -145,8 +149,16 @@ export class WorkRequestService {
 
                 await this.createWorkRequest(sendDataWorkRequest)
                 SuccessRequest = true;
+                return 'Заявка успешно создана'
             }
             _date.setHours(_date.getHours() + 1);
+
+            tries += 1;
+
+            if (tries > MAX_TRIES) {
+                throw new Error('Не удалось найти доступный слот за разумное время.');
+            }
+
         } while (!SuccessRequest);
     }
 
@@ -177,9 +189,5 @@ export class WorkRequestService {
             }
         })
         return workRequest
-    }
-
-    async findRequestByEmployee(EmployeeId: number) {
-
     }
 }

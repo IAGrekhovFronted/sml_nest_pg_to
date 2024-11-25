@@ -9,7 +9,6 @@ export class UserController {
 
   @Post('create')
   async createUser(@Body() data:Partial<User>) {
-    console.log("Запрос")
     return await this.userService.createUser(data)
   }
 }
